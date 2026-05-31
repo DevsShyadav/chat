@@ -72,7 +72,7 @@ class Plugin {
                 'welcome_message'    => 'Hi! How can I help you today?',
                 'fallback_message'   => 'I\'m not sure I can help with that. Would you like to leave your email so our team can get back to you?',
                 'widget_position'    => 'bottom-right',
-                'widget_color'       => '#6366F1',
+                'widget_color'       => '#10B981',
                 'widget_title'       => 'Chat with us',
                 'widget_subtitle'    => 'We typically reply within minutes',
                 'show_on_mobile'     => true,

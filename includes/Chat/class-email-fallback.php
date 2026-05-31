@@ -82,7 +82,7 @@ class Email_Fallback {
             <style>
                 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1a1a2e; margin: 0; padding: 0; background: #f5f5f7; }
                 .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; margin-top: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-                .header { background: linear-gradient(135deg, #6366F1, #8B5CF6); color: white; padding: 24px 32px; }
+                .header { background: linear-gradient(135deg, #10B981, #34D399); color: white; padding: 24px 32px; }
                 .header h1 { margin: 0; font-size: 20px; font-weight: 600; }
                 .header p { margin: 8px 0 0; opacity: 0.9; font-size: 14px; }
                 .content { padding: 32px; }
@@ -94,7 +94,7 @@ class Email_Fallback {
                 .message-role { font-size: 12px; font-weight: 600; color: #6b7280; text-transform: uppercase; margin-bottom: 4px; }
                 .message-content { font-size: 14px; color: #374151; }
                 .cta { text-align: center; margin-top: 24px; }
-                .cta a { display: inline-block; background: #6366F1; color: white; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: 500; }
+                .cta a { display: inline-block; background: #10B981; color: white; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: 500; }
                 .footer { text-align: center; padding: 16px 32px; color: #9ca3af; font-size: 12px; border-top: 1px solid #f3f4f6; }
             </style>
         </head>

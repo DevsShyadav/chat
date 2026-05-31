@@ -7,10 +7,10 @@
    CSS VARIABLES & DESIGN TOKENS
    ============================================ */
 :root {
-    --wpaicb-primary: #6366F1;
-    --wpaicb-primary-dark: #4F46E5;
-    --wpaicb-primary-light: #EEF2FF;
-    --wpaicb-secondary: #8B5CF6;
+    --wpaicb-primary: #10B981;
+    --wpaicb-primary-dark: #059669;
+    --wpaicb-primary-light: #ECFDF5;
+    --wpaicb-secondary: #34D399;
     --wpaicb-success: #10B981;
     --wpaicb-warning: #F59E0B;
     --wpaicb-error: #EF4444;
@@ -202,9 +202,9 @@
     flex-shrink: 0;
 }
 
-.wpaicb-stat-icon-blue { background: #EEF2FF; color: #6366F1; }
+.wpaicb-stat-icon-blue { background: #ECFDF5; color: #10B981; }
 .wpaicb-stat-icon-green { background: #ECFDF5; color: #10B981; }
-.wpaicb-stat-icon-purple { background: #F5F3FF; color: #8B5CF6; }
+.wpaicb-stat-icon-purple { background: #ECFDF5; color: #34D399; }
 .wpaicb-stat-icon-orange { background: #FFF7ED; color: #F59E0B; }
 
 .wpaicb-stat-content {
@@ -374,7 +374,7 @@
     background: var(--wpaicb-primary-dark);
     color: #fff;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
 .wpaicb-btn-secondary {
@@ -453,7 +453,7 @@
 
 .wpaicb-input:focus, .wpaicb-select:focus, .wpaicb-textarea:focus {
     border-color: var(--wpaicb-primary);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
 }
 
 .wpaicb-textarea { resize: vertical; min-height: 80px; }
@@ -612,7 +612,7 @@
 .wpaicb-provider-active {
     border-color: var(--wpaicb-primary) !important;
     background: var(--wpaicb-primary-light) !important;
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
 }
 
 .wpaicb-provider-name { font-size: 15px; font-weight: 600; color: var(--wpaicb-gray-800); }
@@ -753,7 +753,7 @@
    ONBOARDING BANNER
    ============================================ */
 .wpaicb-onboarding-banner {
-    background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #A78BFA 100%);
+    background: linear-gradient(135deg, #10B981 0%, #34D399 50%, #A78BFA 100%);
     border-radius: var(--wpaicb-radius-lg);
     padding: 32px;
     margin-bottom: 24px;

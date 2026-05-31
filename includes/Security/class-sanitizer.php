@@ -139,7 +139,7 @@ class Sanitizer {
 
         // Color
         if ( isset( $settings['widget_color'] ) ) {
-            $sanitized['widget_color'] = sanitize_hex_color( $settings['widget_color'] ) ?: '#6366F1';
+            $sanitized['widget_color'] = sanitize_hex_color( $settings['widget_color'] ) ?: '#10B981';
         }
 
         // Select fields

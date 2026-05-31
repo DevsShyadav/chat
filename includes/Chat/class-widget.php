@@ -96,7 +96,7 @@ class Widget {
     private function output_widget_html() {
         $settings  = Admin::get_settings();
         $position  = isset( $settings['widget_position'] ) ? $settings['widget_position'] : 'bottom-right';
-        $color     = isset( $settings['widget_color'] ) && ! empty( $settings['widget_color'] ) ? $settings['widget_color'] : '#6366F1';
+        $color     = isset( $settings['widget_color'] ) && ! empty( $settings['widget_color'] ) ? $settings['widget_color'] : '#10B981';
         $dark_mode = isset( $settings['dark_mode'] ) ? $settings['dark_mode'] : 'auto';
         $title     = isset( $settings['widget_title'] ) ? $settings['widget_title'] : 'Chat with us';
         $subtitle  = isset( $settings['widget_subtitle'] ) ? $settings['widget_subtitle'] : 'We typically reply within minutes';
@@ -201,7 +201,7 @@ class Widget {
             'pageUrl'        => $this->get_current_url(),
             'isConfigured'   => $is_configured,
             'position'       => isset( $settings['widget_position'] ) ? $settings['widget_position'] : 'bottom-right',
-            'color'          => isset( $settings['widget_color'] ) ? $settings['widget_color'] : '#6366F1',
+            'color'          => isset( $settings['widget_color'] ) ? $settings['widget_color'] : '#10B981',
             'title'          => isset( $settings['widget_title'] ) ? $settings['widget_title'] : 'Chat with us',
             'subtitle'       => isset( $settings['widget_subtitle'] ) ? $settings['widget_subtitle'] : 'We typically reply within minutes',
             'welcomeMessage' => isset( $settings['welcome_message'] ) ? $settings['welcome_message'] : 'Hi! How can I help you today?',
@@ -280,7 +280,7 @@ class Widget {
         }
 
         if ( strlen( $hex ) !== 6 ) {
-            return '#6366F1'; // Fallback to default if invalid
+            return '#10B981'; // Fallback to default if invalid
         }
 
         $r = max( 0, min( 255, hexdec( substr( $hex, 0, 2 ) ) + $steps ) );

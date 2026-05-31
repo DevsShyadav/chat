@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $widget_settings = \WPAICB\Admin\Admin::get_settings();
 $position        = $widget_settings['widget_position'] ?? 'bottom-right';
-$color           = $widget_settings['widget_color'] ?? '#6366F1';
+$color           = $widget_settings['widget_color'] ?? '#10B981';
 $dark_mode       = $widget_settings['dark_mode'] ?? 'auto';
 ?>
 <!-- WP AI Chatbot Widget -->

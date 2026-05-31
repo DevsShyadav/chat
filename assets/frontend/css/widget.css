@@ -7,9 +7,9 @@
    CSS VARIABLES
    ============================================ */
 .wpaicb-widget {
-    --wpaicb-primary: #6366F1;
-    --wpaicb-primary-dark: #4F46E5;
-    --wpaicb-primary-light: rgba(99, 102, 241, 0.12);
+    --wpaicb-primary: #10B981;
+    --wpaicb-primary-dark: #059669;
+    --wpaicb-primary-light: rgba(16, 185, 129, 0.12);
     --wpaicb-bg: #ffffff;
     --wpaicb-bg-secondary: #f9fafb;
     --wpaicb-text: #1f2937;
