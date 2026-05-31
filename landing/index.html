@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WP AI Chatbot — 24/7 AI Customer Support for WordPress | DevsArun</title>
+    <meta name="description" content="Plug & Play AI chatbot for WordPress. BYOK (OpenAI/Gemini/Groq), trains on your site content, answers customers 24/7. One-time $29 vs $29/month competitors.">
+    <meta property="og:title" content="WP AI Chatbot — 24/7 AI Customer Support for WordPress">
+    <meta property="og:description" content="Train an AI on your site content. Answer customers 24/7. One-time payment, no monthly fees.">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            50: '#ECFDF5', 100: '#D1FAE5', 200: '#A7F3D0', 300: '#6EE7B7',
+                            400: '#34D399', 500: '#10B981', 600: '#059669', 700: '#047857',
+                            800: '#065F46', 900: '#064E3B'
+                        }
+                    },
+                    animation: {
+                        'fade-up': 'fadeUp 0.7s ease forwards',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-ring': 'pulseRing 2s cubic-bezier(0.4,0,0.6,1) infinite',
+                        'gradient': 'gradient 8s ease infinite',
+                    },
+                    keyframes: {
+                        fadeUp: { '0%': { opacity: '0', transform: 'translateY(30px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+                        float: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-18px)' } },
+                        pulseRing: { '0%': { transform: 'scale(0.9)', opacity: '0.7' }, '100%': { transform: 'scale(1.5)', opacity: '0' } },
+                        gradient: { '0%,100%': { backgroundPosition: '0% 50%' }, '50%': { backgroundPosition: '100% 50%' } },
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-mesh {
+            background: radial-gradient(at 20% 20%, #D1FAE5 0px, transparent 50%),
+                        radial-gradient(at 80% 0%, #A7F3D0 0px, transparent 50%),
+                        radial-gradient(at 80% 100%, #6EE7B7 0px, transparent 50%);
+        }
+        .glass { background: rgba(255,255,255,0.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+        .text-gradient { background: linear-gradient(135deg, #059669, #10B981, #34D399); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; background-size: 200% auto; }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.7s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #10B981; border-radius: 5px; }
+    </style>
+</head>
+<body class="bg-white text-slate-900 antialiased overflow-x-hidden">
+
+
+    <!-- ============ NAVBAR ============ -->
+    <header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <nav class="glass border-b border-slate-200/60">
+            <div class="max-w-7xl mx-auto px-5 sm:px-8">
+                <div class="flex items-center justify-between h-16 sm:h-20">
+                    <!-- Logo -->
+                    <a href="#" class="flex items-center gap-2.5 group">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center shadow-lg shadow-brand-500/30 group-hover:scale-105 transition-transform">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        </div>
+                        <span class="text-lg sm:text-xl font-extrabold tracking-tight">WP AI <span class="text-brand-600">Chatbot</span></span>
+                    </a>
+                    <!-- Desktop nav -->
+                    <div class="hidden lg:flex items-center gap-8">
+                        <a href="#features" class="text-sm font-medium text-slate-600 hover:text-brand-600 transition-colors">Features</a>
+                        <a href="#how" class="text-sm font-medium text-slate-600 hover:text-brand-600 transition-colors">How it Works</a>
+                        <a href="#compare" class="text-sm font-medium text-slate-600 hover:text-brand-600 transition-colors">Compare</a>
+                        <a href="#pricing" class="text-sm font-medium text-slate-600 hover:text-brand-600 transition-colors">Pricing</a>
+                        <a href="#faq" class="text-sm font-medium text-slate-600 hover:text-brand-600 transition-colors">FAQ</a>
+                    </div>
+                    <!-- Desktop CTAs -->
+                    <div class="hidden lg:flex items-center gap-3">
+                        <button onclick="downloadTrial()" class="px-5 py-2.5 text-sm font-semibold text-brand-700 bg-brand-50 rounded-xl hover:bg-brand-100 transition-colors">Free Trial</button>
+                        <button onclick="buyPro()" class="px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-brand-500 to-brand-600 rounded-xl shadow-lg shadow-brand-500/30 hover:shadow-brand-500/50 hover:-translate-y-0.5 transition-all">Buy Now</button>
+                    </div>
+                    <!-- Mobile hamburger -->
+                    <button id="menuBtn" class="lg:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors" aria-label="Menu">
+                        <svg id="menuIcon" class="w-6 h-6 text-slate-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                        <svg id="closeIcon" class="w-6 h-6 text-slate-700 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <!-- Mobile menu -->
+        <div id="mobileMenu" class="lg:hidden hidden glass border-b border-slate-200/60">
+            <div class="px-5 py-5 space-y-1">
+                <a href="#features" class="mobile-link block px-4 py-3 rounded-xl text-base font-medium text-slate-700 hover:bg-brand-50 hover:text-brand-600 transition-colors">Features</a>
+                <a href="#how" class="mobile-link block px-4 py-3 rounded-xl text-base font-medium text-slate-700 hover:bg-brand-50 hover:text-brand-600 transition-colors">How it Works</a>
+                <a href="#compare" class="mobile-link block px-4 py-3 rounded-xl text-base font-medium text-slate-700 hover:bg-brand-50 hover:text-brand-600 transition-colors">Compare</a>
+                <a href="#pricing" class="mobile-link block px-4 py-3 rounded-xl text-base font-medium text-slate-700 hover:bg-brand-50 hover:text-brand-600 transition-colors">Pricing</a>
+                <a href="#faq" class="mobile-link block px-4 py-3 rounded-xl text-base font-medium text-slate-700 hover:bg-brand-50 hover:text-brand-600 transition-colors">FAQ</a>
+                <div class="pt-3 grid grid-cols-2 gap-3">
+                    <button onclick="downloadTrial()" class="px-4 py-3 text-sm font-semibold text-brand-700 bg-brand-50 rounded-xl">Free Trial</button>
+                    <button onclick="buyPro()" class="px-4 py-3 text-sm font-semibold text-white bg-gradient-to-r from-brand-500 to-brand-600 rounded-xl">Buy Now</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- ============ HERO ============ -->
+    <section class="relative pt-28 sm:pt-36 lg:pt-44 pb-16 sm:pb-24 gradient-mesh overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-white/40 to-white"></div>
+        <div class="relative max-w-7xl mx-auto px-5 sm:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+                <!-- Left: copy -->
+                <div class="text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-100 border border-brand-200 text-brand-700 text-xs sm:text-sm font-semibold mb-6 animate-fade-up">
+                        <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-500 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-brand-600"></span></span>
+                        Powered by OpenAI, Gemini & Groq
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight mb-6">
+                        Turn your website into a <span class="text-gradient">24/7 AI support</span> agent
+                    </h1>
+                    <p class="text-base sm:text-lg text-slate-600 leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0">
+                        WP AI Chatbot trains on your own content and answers customer questions instantly — round the clock. Bring your own API key. Pay <strong class="text-slate-900">once</strong>, not every month.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
+                        <button onclick="buyPro()" class="group px-7 py-4 text-base font-semibold text-white bg-gradient-to-r from-brand-500 to-brand-600 rounded-2xl shadow-xl shadow-brand-500/30 hover:shadow-brand-500/50 hover:-translate-y-1 transition-all flex items-center justify-center gap-2">
+                            Get Pro — One-Time Payment
+                            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </button>
+                        <button onclick="downloadTrial()" class="px-7 py-4 text-base font-semibold text-slate-700 bg-white border-2 border-slate-200 rounded-2xl hover:border-brand-400 hover:text-brand-600 transition-all flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                            Try Free for 24 Hours
+                        </button>
+                    </div>
+                    <div class="flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-3 text-sm text-slate-500">
+                        <div class="flex items-center gap-2"><svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>No monthly fees</div>
+                        <div class="flex items-center gap-2"><svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Instant download</div>
+                        <div class="flex items-center gap-2"><svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Setup in 5 minutes</div>
+                    </div>
+                </div>
+                <!-- Right: chat mockup -->
+                <div class="relative animate-float">
+                    <div class="absolute -inset-4 bg-gradient-to-tr from-brand-300/40 to-brand-500/30 blur-3xl rounded-full"></div>
+                    <div class="relative bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden max-w-sm mx-auto">
+                        <div class="bg-gradient-to-r from-brand-500 to-brand-600 p-5 flex items-center gap-3">
+                            <div class="w-11 h-11 rounded-full bg-white/20 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                            </div>
+                            <div><div class="text-white font-semibold text-sm">Chat with us</div><div class="text-white/80 text-xs">Typically replies instantly</div></div>
+                        </div>
+                        <div class="p-5 space-y-4 bg-slate-50 h-72 overflow-hidden">
+                            <div class="flex justify-end"><div class="bg-brand-500 text-white text-sm px-4 py-2.5 rounded-2xl rounded-br-md max-w-[80%]">What are your shipping charges?</div></div>
+                            <div class="flex justify-start"><div class="bg-white border border-slate-200 text-slate-700 text-sm px-4 py-2.5 rounded-2xl rounded-bl-md max-w-[85%] shadow-sm">We offer <strong>free shipping</strong> on all orders above $50! Standard delivery takes 3-5 business days. 🚚</div></div>
+                            <div class="flex justify-end"><div class="bg-brand-500 text-white text-sm px-4 py-2.5 rounded-2xl rounded-br-md max-w-[80%]">Do you have a return policy?</div></div>
+                            <div class="flex justify-start"><div class="bg-white border border-slate-200 text-slate-500 text-sm px-4 py-3 rounded-2xl rounded-bl-md flex gap-1.5"><span class="w-2 h-2 bg-brand-400 rounded-full animate-bounce"></span><span class="w-2 h-2 bg-brand-400 rounded-full animate-bounce" style="animation-delay:0.15s"></span><span class="w-2 h-2 bg-brand-400 rounded-full animate-bounce" style="animation-delay:0.3s"></span></div></div>
+                        </div>
+                        <div class="p-4 bg-white border-t border-slate-100 flex items-center gap-2">
+                            <div class="flex-1 bg-slate-100 rounded-xl px-4 py-2.5 text-sm text-slate-400">Type your message...</div>
+                            <div class="w-10 h-10 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 flex items-center justify-center"><svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Stats bar -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-16 sm:mt-24 pt-10 border-t border-slate-200/60">
+                <div class="text-center"><div class="text-3xl sm:text-4xl font-extrabold text-gradient">12x</div><div class="text-sm text-slate-500 mt-1">Cheaper than Tidio (yr 1)</div></div>
+                <div class="text-center"><div class="text-3xl sm:text-4xl font-extrabold text-gradient">24/7</div><div class="text-sm text-slate-500 mt-1">Always-on support</div></div>
+                <div class="text-center"><div class="text-3xl sm:text-4xl font-extrabold text-gradient">3</div><div class="text-sm text-slate-500 mt-1">AI providers supported</div></div>
+                <div class="text-center"><div class="text-3xl sm:text-4xl font-extrabold text-gradient">5 min</div><div class="text-sm text-slate-500 mt-1">To go live</div></div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============ FEATURES ============ -->
+    <section id="features" class="py-20 sm:py-28 bg-white">
+        <div class="max-w-7xl mx-auto px-5 sm:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-brand-50 text-brand-700 text-sm font-semibold mb-4">Everything you need</span>
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-5">Powerful features, <span class="text-gradient">zero complexity</span></h2>
+                <p class="text-base sm:text-lg text-slate-600">Built for small businesses who want enterprise-grade AI support without the enterprise price tag.</p>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- F1 -->
+                <div class="reveal group p-7 rounded-3xl border border-slate-100 bg-white hover:shadow-xl hover:shadow-slate-200/60 hover:-translate-y-1 transition-all">
+                    <div class="w-14 h-14 rounded-2xl bg-brand-50 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-brand-100 transition-all">
+                        <svg class="w-7 h-7 text-brand-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Bring Your Own Key (BYOK)</h3>
+                    <p class="text-slate-600 leading-relaxed text-sm">Connect OpenAI (GPT-5.4), Google Gemini (2.5 Flash), or Groq (LLaMA 4). You control the AI, you control the cost. No middleman markup — just paste your API key and go.</p>
+                </div>
+                <!-- F2 -->
+                <div class="reveal group p-7 rounded-3xl border border-slate-100 bg-white hover:shadow-xl hover:shadow-slate-200/60 hover:-translate-y-1 transition-all" style="transition-delay:0.05s">
+                    <div class="w-14 h-14 rounded-2xl bg-brand-50 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-brand-100 transition-all">
+                        <svg class="w-7 h-7 text-brand-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Auto-Trains on Your Content</h3>
+                    <p class="text-slate-600 leading-relaxed text-sm">Automatically crawls your posts, pages, and WooCommerce products. The bot learns your business and answers from YOUR content — no manual training, no copy-pasting.</p>
+                </div>
+                <!-- F3 -->
+                <div class="reveal group p-7 rounded-3xl border border-slate-100 bg-white hover:shadow-xl hover:shadow-slate-200/60 hover:-translate-y-1 transition-all" style="transition-delay:0.1s">
+                    <div class="w-14 h-14 rounded-2xl bg-brand-50 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-brand-100 transition-all">
+                        <svg class="w-7 h-7 text-brand-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r="2.5"/><path d="M17 22v-8l3-3M6 22v-6l-3-3 3-3"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Fully Customizable Widget</h3>
+                    <p class="text-slate-600 leading-relaxed text-sm">Match your brand in seconds — custom colors, position, welcome message, icon, and dark/light mode. Looks premium on every device, out of the box.</p>
+                </div>
+                <!-- F4 -->
+                <div class="reveal group p-7 rounded-3xl border border-slate-100 bg-white hover:shadow-xl hover:shadow-slate-200/60 hover:-translate-y-1 transition-all">
+                    <div class="w-14 h-14 rounded-2xl bg-brand-50 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-brand-100 transition-all">
+                        <svg class="w-7 h-7 text-brand-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Smart Email Fallback</h3>
+                    <p class="text-slate-600 leading-relaxed text-sm">When the AI can't confidently answer, it gracefully captures the visitor's email and notifies you instantly — so you never lose a lead, even when offline.</p>
+                </div>
+                <!-- F5 -->
+                <div class="reveal group p-7 rounded-3xl border border-slate-100 bg-white hover:shadow-xl hover:shadow-slate-200/60 hover:-translate-y-1 transition-all" style="transition-delay:0.05s">
+                    <div class="w-14 h-14 rounded-2xl bg-brand-50 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-brand-100 transition-all">
+                        <svg class="w-7 h-7 text-brand-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Analytics Dashboard</h3>
+                    <p class="text-slate-600 leading-relaxed text-sm">Track conversations, resolution rate, popular questions, and captured emails — all in a beautiful dashboard. Know exactly what your customers ask.</p>
+                </div>
+                <!-- F6 -->
+                <div class="reveal group p-7 rounded-3xl border border-slate-100 bg-white hover:shadow-xl hover:shadow-slate-200/60 hover:-translate-y-1 transition-all" style="transition-delay:0.1s">
+                    <div class="w-14 h-14 rounded-2xl bg-brand-50 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-brand-100 transition-all">
+                        <svg class="w-7 h-7 text-brand-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11a4 4 0 1 0 8 0 4 4 0 0 0-8 0zM21 21l-4.35-4.35"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Custom Q&A Pairs</h3>
+                    <p class="text-slate-600 leading-relaxed text-sm">Add your own question-answer pairs for FAQs that take priority over AI responses. Perfect for pricing, hours, policies — answers you want to be 100% accurate.</p>
+                </div>
+            </div>
+
+            <!-- Secondary features strip -->
+            <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="reveal flex items-center gap-3 p-4 rounded-2xl bg-slate-50"><svg class="w-6 h-6 text-brand-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span class="text-sm font-medium text-slate-700">Rate limiting & anti-spam</span></div>
+                <div class="reveal flex items-center gap-3 p-4 rounded-2xl bg-slate-50"><svg class="w-6 h-6 text-brand-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span class="text-sm font-medium text-slate-700">Conversation history</span></div>
+                <div class="reveal flex items-center gap-3 p-4 rounded-2xl bg-slate-50"><svg class="w-6 h-6 text-brand-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg><span class="text-sm font-medium text-slate-700">Dark mode support</span></div>
+                <div class="reveal flex items-center gap-3 p-4 rounded-2xl bg-slate-50"><svg class="w-6 h-6 text-brand-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span class="text-sm font-medium text-slate-700">100% mobile responsive</span></div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============ HOW IT WORKS ============ -->
+    <section id="how" class="py-20 sm:py-28 bg-slate-50 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-5 sm:px-8 relative">
+            <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-brand-50 text-brand-700 text-sm font-semibold mb-4">Live in minutes</span>
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-5">From install to <span class="text-gradient">answering customers</span></h2>
+                <p class="text-base sm:text-lg text-slate-600">Four simple steps. No coding. No developers. No monthly bills.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Step 1 -->
+                <div class="reveal relative">
+                    <div class="bg-white rounded-3xl p-7 border border-slate-100 h-full shadow-sm">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-500 to-brand-600 text-white font-extrabold text-xl flex items-center justify-center mb-5 shadow-lg shadow-brand-500/30">1</div>
+                        <h3 class="text-lg font-bold mb-2">Install & Activate</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">Upload the plugin ZIP to WordPress and click activate. Takes under 60 seconds.</p>
+                    </div>
+                </div>
+                <!-- Step 2 -->
+                <div class="reveal relative" style="transition-delay:0.08s">
+                    <div class="bg-white rounded-3xl p-7 border border-slate-100 h-full shadow-sm">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-500 to-brand-600 text-white font-extrabold text-xl flex items-center justify-center mb-5 shadow-lg shadow-brand-500/30">2</div>
+                        <h3 class="text-lg font-bold mb-2">Add Your API Key</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">Paste your OpenAI, Gemini, or Groq key. Hit "Test Connection" to confirm — done.</p>
+                    </div>
+                </div>
+                <!-- Step 3 -->
+                <div class="reveal relative" style="transition-delay:0.16s">
+                    <div class="bg-white rounded-3xl p-7 border border-slate-100 h-full shadow-sm">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-500 to-brand-600 text-white font-extrabold text-xl flex items-center justify-center mb-5 shadow-lg shadow-brand-500/30">3</div>
+                        <h3 class="text-lg font-bold mb-2">Train on Content</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">Click "Re-index" and the bot instantly learns from your pages, posts & products.</p>
+                    </div>
+                </div>
+                <!-- Step 4 -->
+                <div class="reveal relative" style="transition-delay:0.24s">
+                    <div class="bg-white rounded-3xl p-7 border border-slate-100 h-full shadow-sm">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-500 to-brand-600 text-white font-extrabold text-xl flex items-center justify-center mb-5 shadow-lg shadow-brand-500/30">4</div>
+                        <h3 class="text-lg font-bold mb-2">Go Live 🎉</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">The widget appears on your site, answering customers 24/7. That's it!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ COMPARISON ============ -->
+    <section id="compare" class="py-20 sm:py-28 bg-white">
+        <div class="max-w-5xl mx-auto px-5 sm:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-brand-50 text-brand-700 text-sm font-semibold mb-4">The math is simple</span>
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-5">Save <span class="text-gradient">thousands</span> per year</h2>
+                <p class="text-base sm:text-lg text-slate-600">Why pay monthly forever when you can pay once?</p>
+            </div>
+
+            <div class="reveal overflow-x-auto rounded-3xl border border-slate-200 shadow-xl shadow-slate-200/50">
+                <table class="w-full text-left min-w-[560px]">
+                    <thead>
+                        <tr class="bg-slate-50 border-b border-slate-200">
+                            <th class="p-5 text-sm font-semibold text-slate-500">Plan</th>
+                            <th class="p-5 text-sm font-semibold text-slate-500 text-center">Monthly Cost</th>
+                            <th class="p-5 text-sm font-semibold text-slate-500 text-center">Year 1 Total</th>
+                            <th class="p-5 text-sm font-semibold text-slate-500 text-center">Recurring?</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <tr class="hover:bg-slate-50/50">
+                            <td class="p-5 font-semibold text-slate-700">Intercom</td>
+                            <td class="p-5 text-center text-slate-600">$74/mo</td>
+                            <td class="p-5 text-center text-slate-600">$888</td>
+                            <td class="p-5 text-center"><span class="text-red-500 font-semibold">Forever</span></td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/50">
+                            <td class="p-5 font-semibold text-slate-700">Tidio</td>
+                            <td class="p-5 text-center text-slate-600">$29/mo</td>
+                            <td class="p-5 text-center text-slate-600">$348</td>
+                            <td class="p-5 text-center"><span class="text-red-500 font-semibold">Forever</span></td>
+                        </tr>
+                        <tr class="bg-brand-50/60 ring-2 ring-brand-400 ring-inset">
+                            <td class="p-5 font-extrabold text-brand-700 flex items-center gap-2">WP AI Chatbot <span class="px-2 py-0.5 rounded-full bg-brand-500 text-white text-[10px] font-bold uppercase">You</span></td>
+                            <td class="p-5 text-center font-bold text-brand-700">$0/mo</td>
+                            <td class="p-5 text-center font-extrabold text-brand-700">$29 once</td>
+                            <td class="p-5 text-center"><span class="text-brand-600 font-semibold">Never</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-center text-sm text-slate-500 mt-6 reveal">* You only pay your AI provider's usage (often pennies, or free on Groq/Gemini tiers).</p>
+        </div>
+    </section>
+
+
+    <!-- ============ PRICING ============ -->
+    <section id="pricing" class="py-20 sm:py-28 bg-slate-50 relative overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-brand-200/30 blur-3xl rounded-full"></div>
+        <div class="max-w-5xl mx-auto px-5 sm:px-8 relative">
+            <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-brand-50 text-brand-700 text-sm font-semibold mb-4">Simple, honest pricing</span>
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-5">One price. <span class="text-gradient">Lifetime access.</span></h2>
+                <p class="text-base sm:text-lg text-slate-600">Try free for 24 hours. Love it? Pay once and own it forever.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-4xl mx-auto">
+                <!-- Trial card -->
+                <div class="reveal bg-white rounded-3xl border border-slate-200 p-8 sm:p-10 flex flex-col">
+                    <div class="mb-6">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold mb-4">⏱️ 24-Hour Trial</div>
+                        <h3 class="text-2xl font-extrabold mb-2">Free Trial</h3>
+                        <p class="text-slate-500 text-sm">Test every feature, risk-free.</p>
+                    </div>
+                    <div class="mb-6"><span class="text-5xl font-extrabold tracking-tight">₹0</span><span class="text-slate-500 text-lg">/24 hrs</span></div>
+                    <ul class="space-y-3.5 mb-8 flex-1">
+                        <li class="flex items-start gap-3 text-sm text-slate-700"><svg class="w-5 h-5 text-brand-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Full access to all features</li>
+                        <li class="flex items-start gap-3 text-sm text-slate-700"><svg class="w-5 h-5 text-brand-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>All 3 AI providers</li>
+                        <li class="flex items-start gap-3 text-sm text-slate-700"><svg class="w-5 h-5 text-brand-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Unlimited conversations</li>
+                        <li class="flex items-start gap-3 text-sm text-slate-400"><svg class="w-5 h-5 text-slate-300 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>Auto-deletes after 24 hours</li>
+                    </ul>
+                    <button onclick="downloadTrial()" class="w-full py-4 rounded-2xl font-semibold text-brand-700 bg-brand-50 border-2 border-brand-200 hover:bg-brand-100 hover:border-brand-300 transition-all">Download Free Trial</button>
+                </div>
+
+                <!-- Pro card -->
+                <div class="reveal relative bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-8 sm:p-10 flex flex-col shadow-2xl overflow-hidden">
+                    <div class="absolute top-0 right-0 w-40 h-40 bg-brand-500/20 blur-3xl rounded-full"></div>
+                    <div class="absolute top-5 right-5"><span class="px-3 py-1 rounded-full bg-brand-500 text-white text-xs font-bold uppercase tracking-wide">Best Value</span></div>
+                    <div class="relative mb-6">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-brand-300 text-xs font-semibold mb-4">⚡ Lifetime License</div>
+                        <h3 class="text-2xl font-extrabold mb-2 text-white">Pro</h3>
+                        <p class="text-slate-400 text-sm">Everything, forever. No recurring fees.</p>
+                    </div>
+                    <div class="relative mb-6 flex items-end gap-2">
+                        <span class="text-5xl font-extrabold tracking-tight text-white">₹2,400</span>
+                        <span class="text-slate-400 text-lg mb-1">once</span>
+                        <span class="ml-2 mb-2 text-sm text-slate-500 line-through">₹6,000</span>
+                    </div>
+                    <ul class="relative space-y-3.5 mb-8 flex-1">
+                        <li class="flex items-start gap-3 text-sm text-slate-200"><svg class="w-5 h-5 text-brand-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Everything in Trial — permanently</li>
+                        <li class="flex items-start gap-3 text-sm text-slate-200"><svg class="w-5 h-5 text-brand-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Never expires — lifetime updates</li>
+                        <li class="flex items-start gap-3 text-sm text-slate-200"><svg class="w-5 h-5 text-brand-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Priority email support</li>
+                        <li class="flex items-start gap-3 text-sm text-slate-200"><svg class="w-5 h-5 text-brand-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Instant download after payment</li>
+                        <li class="flex items-start gap-3 text-sm text-slate-200"><svg class="w-5 h-5 text-brand-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>White-label (remove branding)</li>
+                    </ul>
+                    <button onclick="buyPro()" class="relative w-full py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-brand-500 to-brand-600 shadow-xl shadow-brand-500/30 hover:shadow-brand-500/50 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                        Buy Now with Razorpay
+                    </button>
+                    <p class="relative text-center text-xs text-slate-500 mt-4">🔒 Secure payment • Instant access • 7-day money-back</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============ TRIAL EXPLAINER ============ -->
+    <section class="py-20 sm:py-28 bg-white">
+        <div class="max-w-5xl mx-auto px-5 sm:px-8">
+            <div class="reveal bg-gradient-to-br from-brand-50 to-brand-100/50 rounded-[2rem] p-8 sm:p-12 border border-brand-200/50 relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 w-48 h-48 bg-brand-300/30 blur-3xl rounded-full"></div>
+                <div class="relative grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-brand-700 text-xs font-semibold mb-4 shadow-sm">⏱️ How the trial works</div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold mb-4 leading-tight">Try everything for <span class="text-gradient">24 hours</span>, zero risk</h2>
+                        <p class="text-slate-600 leading-relaxed mb-6">Download the trial version and unlock every single feature instantly. The bot trains, chats, and captures leads just like Pro. After 24 hours, the trial automatically deactivates and removes itself — no charges, no commitments, no leftover clutter.</p>
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-sm shrink-0"><svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div><span class="text-sm font-medium text-slate-700">Full features for 24 hours</span></div>
+                            <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-sm shrink-0"><svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div><span class="text-sm font-medium text-slate-700">Auto-deletes — no manual cleanup</span></div>
+                            <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-sm shrink-0"><svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div><span class="text-sm font-medium text-slate-700">Upgrade to Pro anytime to keep it</span></div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-4">
+                        <div class="bg-white rounded-2xl p-6 shadow-lg text-center">
+                            <div class="text-5xl font-extrabold text-gradient mb-2">24h</div>
+                            <p class="text-sm text-slate-500">Full trial access, then auto-removes</p>
+                        </div>
+                        <button onclick="downloadTrial()" class="w-full py-4 rounded-2xl font-semibold text-white bg-gradient-to-r from-brand-500 to-brand-600 shadow-lg shadow-brand-500/30 hover:-translate-y-0.5 transition-all">Start My Free Trial</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section id="faq" class="py-20 sm:py-28 bg-slate-50">
+        <div class="max-w-3xl mx-auto px-5 sm:px-8">
+            <div class="text-center mb-14 reveal">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-brand-50 text-brand-700 text-sm font-semibold mb-4">Got questions?</span>
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-5">Frequently asked questions</h2>
+            </div>
+            <div class="space-y-4" id="faqList">
+                <div class="reveal faq-item bg-white rounded-2xl border border-slate-200 overflow-hidden">
+                    <button class="faq-q w-full flex items-center justify-between p-5 sm:p-6 text-left"><span class="font-semibold text-slate-800 pr-4">Which AI provider should I choose?</span><svg class="faq-icon w-5 h-5 text-brand-500 shrink-0 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+                    <div class="faq-a max-h-0 overflow-hidden transition-all duration-300"><p class="px-5 sm:px-6 pb-6 text-sm text-slate-600 leading-relaxed">OpenAI (GPT-5.4) gives the best quality. Groq is the fastest and has a generous free tier. Gemini balances both. You can switch anytime — you only need ONE provider.</p></div>
+                </div>
+                <div class="reveal faq-item bg-white rounded-2xl border border-slate-200 overflow-hidden">
+                    <button class="faq-q w-full flex items-center justify-between p-5 sm:p-6 text-left"><span class="font-semibold text-slate-800 pr-4">How much does it cost to run?</span><svg class="faq-icon w-5 h-5 text-brand-500 shrink-0 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+                    <div class="faq-a max-h-0 overflow-hidden transition-all duration-300"><p class="px-5 sm:px-6 pb-6 text-sm text-slate-600 leading-relaxed">The plugin is a one-time payment. AI usage is billed by your provider — typically a few cents per conversation on OpenAI, or completely free on Groq's and Gemini's free tiers for low volume.</p></div>
+                </div>
+                <div class="reveal faq-item bg-white rounded-2xl border border-slate-200 overflow-hidden">
+                    <button class="faq-q w-full flex items-center justify-between p-5 sm:p-6 text-left"><span class="font-semibold text-slate-800 pr-4">Does it work with WooCommerce?</span><svg class="faq-icon w-5 h-5 text-brand-500 shrink-0 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+                    <div class="faq-a max-h-0 overflow-hidden transition-all duration-300"><p class="px-5 sm:px-6 pb-6 text-sm text-slate-600 leading-relaxed">Yes! Just select "Products" as a content type in Training settings and the bot will learn your entire catalog — answering questions about pricing, shipping, returns, and more.</p></div>
+                </div>
+                <div class="reveal faq-item bg-white rounded-2xl border border-slate-200 overflow-hidden">
+                    <button class="faq-q w-full flex items-center justify-between p-5 sm:p-6 text-left"><span class="font-semibold text-slate-800 pr-4">What happens after I pay?</span><svg class="faq-icon w-5 h-5 text-brand-500 shrink-0 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+                    <div class="faq-a max-h-0 overflow-hidden transition-all duration-300"><p class="px-5 sm:px-6 pb-6 text-sm text-slate-600 leading-relaxed">The moment your Razorpay payment succeeds, the Pro plugin ZIP downloads automatically. Just upload it to WordPress, activate, and you're set — forever, with no recurring charges.</p></div>
+                </div>
+                <div class="reveal faq-item bg-white rounded-2xl border border-slate-200 overflow-hidden">
+                    <button class="faq-q w-full flex items-center justify-between p-5 sm:p-6 text-left"><span class="font-semibold text-slate-800 pr-4">Is my data safe?</span><svg class="faq-icon w-5 h-5 text-brand-500 shrink-0 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+                    <div class="faq-a max-h-0 overflow-hidden transition-all duration-300"><p class="px-5 sm:px-6 pb-6 text-sm text-slate-600 leading-relaxed">Absolutely. Everything runs on YOUR WordPress site and YOUR AI account. We never see your conversations or data. API keys are encrypted at rest with AES-256.</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ FINAL CTA ============ -->
+    <section class="py-20 sm:py-28 bg-white">
+        <div class="max-w-5xl mx-auto px-5 sm:px-8">
+            <div class="reveal relative bg-gradient-to-br from-brand-500 via-brand-600 to-brand-700 rounded-[2.5rem] p-10 sm:p-16 text-center overflow-hidden">
+                <div class="absolute top-0 left-0 w-72 h-72 bg-white/10 blur-3xl rounded-full"></div>
+                <div class="absolute bottom-0 right-0 w-72 h-72 bg-brand-300/20 blur-3xl rounded-full"></div>
+                <div class="relative">
+                    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-5 leading-tight">Ready to stop losing customers?</h2>
+                    <p class="text-brand-50 text-base sm:text-lg max-w-xl mx-auto mb-9">Join smart business owners who answer customers 24/7 — without the monthly bill. Set up in 5 minutes.</p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <button onclick="buyPro()" class="px-8 py-4 rounded-2xl font-bold text-brand-700 bg-white shadow-xl hover:-translate-y-1 transition-all">Get Pro — ₹2,400 Once</button>
+                        <button onclick="downloadTrial()" class="px-8 py-4 rounded-2xl font-semibold text-white bg-white/15 border border-white/30 backdrop-blur hover:bg-white/25 transition-all">Try Free for 24 Hours</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="bg-slate-900 text-slate-400 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-5 sm:px-8">
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-slate-800">
+                <div class="sm:col-span-2 lg:col-span-1">
+                    <div class="flex items-center gap-2.5 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+                        <span class="text-lg font-extrabold text-white">WP AI <span class="text-brand-400">Chatbot</span></span>
+                    </div>
+                    <p class="text-sm leading-relaxed">24/7 AI customer support for WordPress. Built by DevsArun.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4 text-sm">Product</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#features" class="hover:text-brand-400 transition-colors">Features</a></li>
+                        <li><a href="#pricing" class="hover:text-brand-400 transition-colors">Pricing</a></li>
+                        <li><a href="#how" class="hover:text-brand-400 transition-colors">How it Works</a></li>
+                        <li><a href="#faq" class="hover:text-brand-400 transition-colors">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4 text-sm">Get Started</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#" onclick="downloadTrial();return false;" class="hover:text-brand-400 transition-colors">Free Trial</a></li>
+                        <li><a href="#" onclick="buyPro();return false;" class="hover:text-brand-400 transition-colors">Buy Pro</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4 text-sm">Support</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="mailto:itsdevsarun@gmail.com" class="hover:text-brand-400 transition-colors flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>itsdevsarun@gmail.com</a></li>
+                        <li><a href="https://wa.me/917654758443" target="_blank" class="hover:text-brand-400 transition-colors flex items-center gap-2"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.945C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 0 1 8.413 3.488 11.82 11.82 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24z"/></svg>+91 76547 58443</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
+                <p>© 2026 WP AI Chatbot by <a href="https://devsarun.io/" class="text-brand-400 hover:underline">DevsArun</a>. All rights reserved.</p>
+                <p class="text-slate-500">Made with 💚 for WordPress</p>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- ============ WHATSAPP FLOATING WIDGET ============ -->
+    <div class="fixed bottom-6 right-6 z-50">
+        <!-- Chat form panel -->
+        <div id="waPanel" class="hidden mb-4 w-[calc(100vw-3rem)] max-w-sm bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden origin-bottom-right">
+            <div class="bg-[#25D366] p-5 flex items-center gap-3">
+                <div class="w-11 h-11 rounded-full bg-white/20 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.945C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 0 1 8.413 3.488 11.82 11.82 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.738-.981z"/></svg>
+                </div>
+                <div class="flex-1"><div class="text-white font-semibold text-sm">Chat on WhatsApp</div><div class="text-white/80 text-xs">We reply within minutes</div></div>
+                <button onclick="toggleWa()" class="w-8 h-8 rounded-lg hover:bg-white/20 flex items-center justify-center transition-colors"><svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <form id="waForm" class="p-5 space-y-3.5">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1.5">Your Name</label>
+                    <input type="text" id="waName" required placeholder="John Doe" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:border-[#25D366] focus:ring-2 focus:ring-[#25D366]/20 outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1.5">Mobile Number</label>
+                    <input type="tel" id="waMobile" required placeholder="+91 98765 43210" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:border-[#25D366] focus:ring-2 focus:ring-[#25D366]/20 outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1.5">How can we help?</label>
+                    <textarea id="waMsg" required rows="3" placeholder="I'd like to know more about..." class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:border-[#25D366] focus:ring-2 focus:ring-[#25D366]/20 outline-none transition-all resize-none"></textarea>
+                </div>
+                <button type="submit" class="w-full py-3.5 rounded-xl font-semibold text-white bg-[#25D366] hover:bg-[#1ebe5d] transition-colors flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.945C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 0 1 8.413 3.488 11.82 11.82 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24z"/></svg>
+                    Send on WhatsApp
+                </button>
+                <p class="text-center text-[11px] text-slate-400">You'll be redirected to WhatsApp to send your message</p>
+            </form>
+        </div>
+        <!-- Floating button -->
+        <button id="waBtn" onclick="toggleWa()" class="relative w-16 h-16 rounded-full bg-[#25D366] shadow-2xl shadow-[#25D366]/40 flex items-center justify-center hover:scale-110 transition-transform ml-auto" aria-label="WhatsApp">
+            <span class="absolute inset-0 rounded-full bg-[#25D366] animate-pulse-ring"></span>
+            <svg class="relative w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.945C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 0 1 8.413 3.488 11.82 11.82 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.738-.981z"/></svg>
+        </button>
+    </div>
+
+
+    <!-- ============ JAVASCRIPT ============ -->
+    <script>
+    /* ============================================================
+       CONFIGURATION — EDIT THESE VALUES
+       ============================================================ */
+    const CONFIG = {
+        // 1. Razorpay Key ID (get from https://dashboard.razorpay.com/app/keys)
+        razorpayKeyId: 'rzp_test_YOUR_KEY_HERE',
+
+        // 2. Price in paise (₹2400 = 240000 paise). Razorpay uses smallest unit.
+        proAmount: 240000,
+        proCurrency: 'INR',
+
+        // 3. Download URLs — upload your two plugin ZIPs to your server
+        trialDownloadUrl: 'https://devsarun.io/downloads/wp-ai-chatbot-trial.zip',
+        proDownloadUrl:   'https://devsarun.io/downloads/wp-ai-chatbot-pro.zip',
+
+        // 4. Your contact details
+        whatsappNumber: '917654758443',
+        supportEmail:   'itsdevsarun@gmail.com',
+
+        // 5. Branding shown on Razorpay checkout
+        brandName: 'WP AI Chatbot',
+        brandDescription: 'Pro License — Lifetime Access'
+    };
+
+    /* ============================================================
+       MOBILE MENU
+       ============================================================ */
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const menuIcon = document.getElementById('menuIcon');
+    const closeIcon = document.getElementById('closeIcon');
+
+    function closeMobileMenu() {
+        mobileMenu.classList.add('hidden');
+        menuIcon.classList.remove('hidden');
+        closeIcon.classList.add('hidden');
+    }
+
+    menuBtn.addEventListener('click', function () {
+        const isOpen = !mobileMenu.classList.contains('hidden');
+        if (isOpen) {
+            closeMobileMenu();
+        } else {
+            mobileMenu.classList.remove('hidden');
+            menuIcon.classList.add('hidden');
+            closeIcon.classList.remove('hidden');
+        }
+    });
+
+    // Close mobile menu when a link is clicked
+    document.querySelectorAll('.mobile-link').forEach(function (link) {
+        link.addEventListener('click', closeMobileMenu);
+    });
+
+    /* ============================================================
+       NAVBAR SCROLL EFFECT
+       ============================================================ */
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', function () {
+        if (window.scrollY > 20) {
+            navbar.classList.add('shadow-lg', 'shadow-slate-200/50');
+        } else {
+            navbar.classList.remove('shadow-lg', 'shadow-slate-200/50');
+        }
+    });
+
+    /* ============================================================
+       SCROLL REVEAL ANIMATIONS
+       ============================================================ */
+    const revealObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(function (el) {
+        revealObserver.observe(el);
+    });
+
+    /* ============================================================
+       FAQ ACCORDION
+       ============================================================ */
+    document.querySelectorAll('.faq-q').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            const item = btn.closest('.faq-item');
+            const answer = item.querySelector('.faq-a');
+            const icon = btn.querySelector('.faq-icon');
+            const isOpen = answer.style.maxHeight && answer.style.maxHeight !== '0px';
+
+            // Close all
+            document.querySelectorAll('.faq-a').forEach(function (a) { a.style.maxHeight = '0px'; });
+            document.querySelectorAll('.faq-icon').forEach(function (i) { i.style.transform = 'rotate(0deg)'; });
+
+            // Open clicked (if it was closed)
+            if (!isOpen) {
+                answer.style.maxHeight = answer.scrollHeight + 'px';
+                icon.style.transform = 'rotate(180deg)';
+            }
+        });
+    });
+
+    /* ============================================================
+       WHATSAPP WIDGET
+       ============================================================ */
+    function toggleWa() {
+        const panel = document.getElementById('waPanel');
+        panel.classList.toggle('hidden');
+    }
+
+    document.getElementById('waForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const name = document.getElementById('waName').value.trim();
+        const mobile = document.getElementById('waMobile').value.trim();
+        const msg = document.getElementById('waMsg').value.trim();
+
+        if (!name || !mobile || !msg) { return; }
+
+        const text =
+            '*New Enquiry — WP AI Chatbot*%0A%0A' +
+            '*Name:* ' + encodeURIComponent(name) + '%0A' +
+            '*Mobile:* ' + encodeURIComponent(mobile) + '%0A' +
+            '*Message:* ' + encodeURIComponent(msg);
+
+        const url = 'https://wa.me/' + CONFIG.whatsappNumber + '?text=' + text;
+        window.open(url, '_blank');
+    });
+
+    /* ============================================================
+       TRIAL DOWNLOAD
+       ============================================================ */
+    function downloadTrial() {
+        // Trigger trial plugin download
+        const a = document.createElement('a');
+        a.href = CONFIG.trialDownloadUrl;
+        a.setAttribute('download', '');
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        showToast('Your free trial download is starting… 🎉');
+    }
+
+    /* ============================================================
+       RAZORPAY PAYMENT → AUTO PRO DOWNLOAD
+       ============================================================ */
+    function buyPro() {
+        const options = {
+            key: CONFIG.razorpayKeyId,
+            amount: CONFIG.proAmount,
+            currency: CONFIG.proCurrency,
+            name: CONFIG.brandName,
+            description: CONFIG.brandDescription,
+            image: '',
+            handler: function (response) {
+                // Payment successful — auto-download the Pro plugin
+                showToast('Payment successful! Downloading Pro… ✅');
+                setTimeout(function () {
+                    const a = document.createElement('a');
+                    a.href = CONFIG.proDownloadUrl + '?pid=' + encodeURIComponent(response.razorpay_payment_id || '');
+                    a.setAttribute('download', '');
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                }, 800);
+            },
+            prefill: { name: '', email: '', contact: '' },
+            notes: { product: 'WP AI Chatbot Pro' },
+            theme: { color: '#10B981' },
+            modal: {
+                ondismiss: function () { showToast('Payment cancelled. You can try again anytime.'); }
+            }
+        };
+
+        if (CONFIG.razorpayKeyId === 'rzp_test_YOUR_KEY_HERE') {
+            showToast('⚠️ Add your Razorpay Key in CONFIG to enable payments.');
+            return;
+        }
+
+        try {
+            const rzp = new Razorpay(options);
+            rzp.on('payment.failed', function () { showToast('Payment failed. Please try again.'); });
+            rzp.open();
+        } catch (err) {
+            showToast('Could not open payment. Please refresh and retry.');
+        }
+    }
+
+    /* ============================================================
+       TOAST NOTIFICATIONS
+       ============================================================ */
+    function showToast(message) {
+        let toast = document.getElementById('wpaicb-toast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'wpaicb-toast';
+            toast.className = 'fixed bottom-28 left-1/2 -translate-x-1/2 z-[60] px-5 py-3.5 rounded-2xl bg-slate-900 text-white text-sm font-medium shadow-2xl opacity-0 transition-all duration-300 max-w-[90vw] text-center';
+            document.body.appendChild(toast);
+        }
+        toast.textContent = message;
+        toast.style.opacity = '1';
+        toast.style.transform = 'translate(-50%, 0)';
+        clearTimeout(window.__toastTimer);
+        window.__toastTimer = setTimeout(function () {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translate(-50%, 10px)';
+        }, 3500);
+    }
+    </script>
+</body>
+</html>
