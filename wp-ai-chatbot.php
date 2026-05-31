@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: WP AI Chatbot
- * Plugin URI: https://wpai-chatbot.com
+ * Plugin URI: https://devsarun.io/
  * Description: Plug & Play AI-powered customer support chatbot. BYOK (OpenAI/Gemini/Groq) — trains on your site content, answers customer questions 24/7.
  * Version: 1.0.0
- * Author: WP AI Chatbot
- * Author URI: https://wpai-chatbot.com
+ * Author: DevsArun
+ * Author URI: https://devsarun.io/
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: wp-ai-chatbot

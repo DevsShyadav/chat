@@ -1,5 +1,5 @@
 === WP AI Chatbot ===
-Contributors: wpaichatbot
+Contributors: devsarun
 Tags: chatbot, ai, customer support, live chat, openai, gemini, groq
 Requires at least: 6.0
 Tested up to: 6.7
