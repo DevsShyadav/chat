@@ -82,6 +82,8 @@ class Widget {
 
         $this->rendered = true;
         $this->output_widget_html();
+        // Debug: uncomment below to verify widget is being called
+        echo '<!-- WPAICB Widget Rendered OK -->' . "\n";
     }
 
     /**

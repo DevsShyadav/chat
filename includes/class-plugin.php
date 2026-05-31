@@ -46,9 +46,54 @@ class Plugin {
      */
     public function run() {
         $this->load_textdomain();
+        $this->ensure_settings_exist();
         $this->check_db_update();
         $this->init_components();
         $this->register_hooks();
+    }
+
+    /**
+     * Ensure default settings exist (handles case where plugin files
+     * were replaced without re-activation).
+     */
+    private function ensure_settings_exist() {
+        if ( false === get_option( 'wpaicb_settings' ) ) {
+            add_option( 'wpaicb_settings', array(
+                'ai_provider'        => 'openai',
+                'openai_api_key'     => '',
+                'openai_model'       => 'gpt-5.4-mini',
+                'gemini_api_key'     => '',
+                'gemini_model'       => 'gemini-2.5-flash',
+                'groq_api_key'       => '',
+                'groq_model'         => 'llama-4-scout-17b-16e-instruct',
+                'max_tokens'         => 500,
+                'temperature'        => 0.7,
+                'system_prompt'      => 'You are a helpful customer support assistant. Answer questions based on the provided context.',
+                'welcome_message'    => 'Hi! How can I help you today?',
+                'fallback_message'   => 'I\'m not sure I can help with that. Would you like to leave your email so our team can get back to you?',
+                'widget_position'    => 'bottom-right',
+                'widget_color'       => '#6366F1',
+                'widget_title'       => 'Chat with us',
+                'widget_subtitle'    => 'We typically reply within minutes',
+                'show_on_mobile'     => true,
+                'show_branding'      => true,
+                'email_fallback'     => true,
+                'fallback_email'     => get_option( 'admin_email' ),
+                'rate_limit'         => 20,
+                'rate_limit_window'  => 60,
+                'content_types'      => array( 'post', 'page' ),
+                'excluded_posts'     => array(),
+                'chunk_size'         => 500,
+                'max_context_chunks' => 5,
+                'confidence_threshold' => 0.3,
+                'auto_index'         => true,
+                'dark_mode'          => 'auto',
+                'widget_icon'        => 'chat',
+                'sound_enabled'      => true,
+                'typing_indicator'   => true,
+                'suggestion_chips'   => array(),
+            ) );
+        }
     }
 
     /**
