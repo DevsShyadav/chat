@@ -69,21 +69,25 @@ class Widget {
         }
 
         // Don't render in admin or during AJAX/REST/cron
-        if ( is_admin() || wp_doing_ajax() || defined( 'REST_REQUEST' ) || defined( 'DOING_CRON' ) ) {
+        if ( is_admin() || wp_doing_ajax() ) {
+            return;
+        }
+        if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+            return;
+        }
+        if ( defined( 'DOING_CRON' ) && DOING_CRON ) {
             return;
         }
 
-        // Check mobile
-        $settings = Admin::get_settings();
-        $show_on_mobile = isset( $settings['show_on_mobile'] ) ? $settings['show_on_mobile'] : true;
-        if ( ! $show_on_mobile && wp_is_mobile() ) {
-            return;
-        }
-
+        // Mark as rendered to prevent duplicate output
         $this->rendered = true;
+
+        // Output a clear marker so deployment can be verified via View Source
+        echo "\n<!-- WPAICB Widget START v" . esc_html( WPAICB_VERSION ) . " -->\n";
+
         $this->output_widget_html();
-        // Debug: uncomment below to verify widget is being called
-        echo '<!-- WPAICB Widget Rendered OK -->' . "\n";
+
+        echo "\n<!-- WPAICB Widget Rendered OK v" . esc_html( WPAICB_VERSION ) . " -->\n";
     }
 
     /**
