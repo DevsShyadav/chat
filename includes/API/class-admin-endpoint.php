@@ -30,18 +30,18 @@ class Admin_Endpoint {
      * Register admin routes.
      */
     public function register() {
-        // Save settings
+        // Save & Get settings (combined to prevent overwrite)
         register_rest_route( $this->namespace, '/admin/settings', array(
-            'methods'             => 'POST',
-            'callback'            => array( $this, 'save_settings' ),
-            'permission_callback' => array( $this, 'admin_permission_check' ),
-        ) );
-
-        // Get settings
-        register_rest_route( $this->namespace, '/admin/settings', array(
-            'methods'             => 'GET',
-            'callback'            => array( $this, 'get_settings' ),
-            'permission_callback' => array( $this, 'admin_permission_check' ),
+            array(
+                'methods'             => 'POST',
+                'callback'            => array( $this, 'save_settings' ),
+                'permission_callback' => array( $this, 'admin_permission_check' ),
+            ),
+            array(
+                'methods'             => 'GET',
+                'callback'            => array( $this, 'get_settings' ),
+                'permission_callback' => array( $this, 'admin_permission_check' ),
+            ),
         ) );
 
         // Test AI connection

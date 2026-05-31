@@ -112,7 +112,10 @@
                     data: JSON.stringify(formData),
                     success: function(response) {
                         $status.text(wpaicbAdmin.strings.saved).css('color', '#10B981');
-                        setTimeout(() => $status.fadeOut(300, () => $status.text('').show()), 3000);
+                        // Reload page after short delay to reflect saved settings
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
                     },
                     error: function(xhr) {
                         const msg = xhr.responseJSON?.message || wpaicbAdmin.strings.error;
