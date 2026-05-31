@@ -33,12 +33,6 @@ class Widget {
             return;
         }
 
-        // Don't load assets if no provider is configured (widget won't render)
-        $is_configured = ! empty( $settings['openai_api_key'] ) || ! empty( $settings['gemini_api_key'] ) || ! empty( $settings['groq_api_key'] );
-        if ( ! $is_configured ) {
-            return;
-        }
-
         // Widget CSS
         wp_enqueue_style(
             'wpaicb-widget',
@@ -77,13 +71,6 @@ class Widget {
             return;
         }
 
-        // Check if provider is configured
-        $is_configured = ! empty( $settings['openai_api_key'] ) || ! empty( $settings['gemini_api_key'] ) || ! empty( $settings['groq_api_key'] );
-
-        if ( ! $is_configured ) {
-            return;
-        }
-
         include WPAICB_PLUGIN_DIR . 'templates/frontend/widget.php';
     }
 
@@ -95,11 +82,14 @@ class Widget {
     private function get_widget_config() {
         $settings = Admin::get_settings();
 
+        $is_configured = ! empty( $settings['openai_api_key'] ) || ! empty( $settings['gemini_api_key'] ) || ! empty( $settings['groq_api_key'] );
+
         return array(
             'restUrl'        => rest_url( 'wpaicb/v1/' ),
             'nonce'          => wp_create_nonce( 'wp_rest' ),
             'sessionId'      => $this->get_or_create_session_id(),
             'pageUrl'        => $this->get_current_url(),
+            'isConfigured'   => $is_configured,
             'position'       => $settings['widget_position'] ?? 'bottom-right',
             'color'          => $settings['widget_color'] ?? '#6366F1',
             'title'          => $settings['widget_title'] ?? __( 'Chat with us', 'wp-ai-chatbot' ),

@@ -129,6 +129,14 @@
             const message = this.elements.input.value.trim();
             if (!message || this.isLoading) return;
 
+            // Check if AI is configured
+            if (!this.config.isConfigured) {
+                this.addMessage(message, 'user');
+                this.addMessage('Chat is being set up. Please check back shortly!', 'assistant');
+                this.elements.input.value = '';
+                return;
+            }
+
             // Clear input
             this.elements.input.value = '';
             this.elements.input.style.height = 'auto';
