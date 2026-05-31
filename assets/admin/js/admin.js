@@ -62,22 +62,47 @@
                 $btn.prop('disabled', true).text(wpaicbAdmin.strings.saving);
                 $status.text('');
 
-                // Gather form data
+                // Gather form data - collect ALL form fields properly
                 const formData = {};
-                $form.find('[name^="wpaicb["]').each(function() {
-                    const name = $(this).attr('name').replace('wpaicb[', '').replace(']', '');
-                    const type = $(this).attr('type');
+
+                // Collect all inputs (text, password, color, number, email, hidden, range)
+                $form.find('input[name^="wpaicb["]').each(function() {
+                    const $el = $(this);
+                    const name = $el.attr('name').replace('wpaicb[', '').replace(']', '');
+                    const type = $el.attr('type') || 'text';
 
                     if (type === 'checkbox') {
-                        formData[name] = $(this).is(':checked') ? 1 : 0;
+                        formData[name] = $el.is(':checked') ? 1 : 0;
                     } else if (type === 'radio') {
-                        if ($(this).is(':checked')) {
-                            formData[name] = $(this).val();
+                        if ($el.is(':checked')) {
+                            formData[name] = $el.val();
                         }
                     } else {
-                        formData[name] = $(this).val();
+                        formData[name] = $el.val();
                     }
                 });
+
+                // Collect all select elements
+                $form.find('select[name^="wpaicb["]').each(function() {
+                    const name = $(this).attr('name').replace('wpaicb[', '').replace(']', '');
+                    formData[name] = $(this).val();
+                });
+
+                // Collect all textarea elements
+                $form.find('textarea[name^="wpaicb["]').each(function() {
+                    const name = $(this).attr('name').replace('wpaicb[', '').replace(']', '');
+                    formData[name] = $(this).val();
+                });
+
+                // Ensure unchecked checkboxes are sent as 0
+                $form.find('input[type="checkbox"][name^="wpaicb["]').each(function() {
+                    const name = $(this).attr('name').replace('wpaicb[', '').replace(']', '');
+                    if (!$(this).is(':checked')) {
+                        formData[name] = 0;
+                    }
+                });
+
+                console.log('WP AI Chatbot: Saving settings', formData);
 
                 $.ajax({
                     url: wpaicbAdmin.restUrl + 'admin/settings',
@@ -92,6 +117,7 @@
                     error: function(xhr) {
                         const msg = xhr.responseJSON?.message || wpaicbAdmin.strings.error;
                         $status.text(msg).css('color', '#EF4444');
+                        console.error('WP AI Chatbot: Save error', xhr.responseJSON);
                     },
                     complete: function() {
                         $btn.prop('disabled', false).html(
