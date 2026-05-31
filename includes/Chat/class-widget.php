@@ -16,18 +16,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Widget {
 
     /**
+     * Whether widget has already been rendered (prevent duplicates).
+     *
+     * @var bool
+     */
+    private $rendered = false;
+
+    /**
      * Enqueue frontend assets.
      */
     public function enqueue_assets() {
-        // Don't load in admin
-        if ( is_admin() ) {
+        // Don't load in admin or during AJAX/REST/cron
+        if ( is_admin() || wp_doing_ajax() || defined( 'REST_REQUEST' ) || defined( 'DOING_CRON' ) ) {
             return;
         }
 
         // Check if widget should show on this device
         $settings = Admin::get_settings();
-
-        // Check mobile visibility
         $show_on_mobile = isset( $settings['show_on_mobile'] ) ? $settings['show_on_mobile'] : true;
         if ( ! $show_on_mobile && wp_is_mobile() ) {
             return;
@@ -41,7 +46,7 @@ class Widget {
             WPAICB_VERSION
         );
 
-        // Widget JS
+        // Widget JS (loaded in footer)
         wp_enqueue_script(
             'wpaicb-widget',
             WPAICB_PLUGIN_URL . 'assets/frontend/js/widget.js',
@@ -58,20 +63,119 @@ class Widget {
      * Render the widget HTML in footer.
      */
     public function render() {
-        // Don't render in admin
-        if ( is_admin() ) {
+        // Prevent double render
+        if ( $this->rendered ) {
             return;
         }
 
-        $settings = Admin::get_settings();
+        // Don't render in admin or during AJAX/REST/cron
+        if ( is_admin() || wp_doing_ajax() || defined( 'REST_REQUEST' ) || defined( 'DOING_CRON' ) ) {
+            return;
+        }
 
-        // Check mobile visibility
+        // Check mobile
+        $settings = Admin::get_settings();
         $show_on_mobile = isset( $settings['show_on_mobile'] ) ? $settings['show_on_mobile'] : true;
         if ( ! $show_on_mobile && wp_is_mobile() ) {
             return;
         }
 
-        include WPAICB_PLUGIN_DIR . 'templates/frontend/widget.php';
+        $this->rendered = true;
+        $this->output_widget_html();
+    }
+
+    /**
+     * Output the widget HTML directly (no template include for reliability).
+     */
+    private function output_widget_html() {
+        $settings  = Admin::get_settings();
+        $position  = isset( $settings['widget_position'] ) ? $settings['widget_position'] : 'bottom-right';
+        $color     = isset( $settings['widget_color'] ) && ! empty( $settings['widget_color'] ) ? $settings['widget_color'] : '#6366F1';
+        $dark_mode = isset( $settings['dark_mode'] ) ? $settings['dark_mode'] : 'auto';
+        $title     = isset( $settings['widget_title'] ) ? $settings['widget_title'] : 'Chat with us';
+        $subtitle  = isset( $settings['widget_subtitle'] ) ? $settings['widget_subtitle'] : 'We typically reply within minutes';
+        $branding  = isset( $settings['show_branding'] ) ? $settings['show_branding'] : true;
+
+        $color_dark  = $this->adjust_color( $color, -20 );
+        $color_light = $color . '1F';
+        ?>
+<!-- WP AI Chatbot Widget -->
+<div id="wpaicb-chat-widget"
+     class="wpaicb-widget wpaicb-widget-<?php echo esc_attr( $position ); ?> wpaicb-theme-<?php echo esc_attr( $dark_mode ); ?>"
+     style="--wpaicb-primary:<?php echo esc_attr( $color ); ?>;--wpaicb-primary-dark:<?php echo esc_attr( $color_dark ); ?>;--wpaicb-primary-light:<?php echo esc_attr( $color_light ); ?>;">
+
+    <button id="wpaicb-trigger" class="wpaicb-trigger" aria-label="Open chat" aria-expanded="false">
+        <span class="wpaicb-trigger-icon wpaicb-trigger-icon-open">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        </span>
+        <span class="wpaicb-trigger-icon wpaicb-trigger-icon-close">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </span>
+        <span class="wpaicb-trigger-pulse"></span>
+    </button>
+
+    <div id="wpaicb-window" class="wpaicb-window" aria-hidden="true">
+        <div class="wpaicb-header">
+            <div class="wpaicb-header-info">
+                <div class="wpaicb-header-avatar">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                </div>
+                <div class="wpaicb-header-text">
+                    <span class="wpaicb-header-title"><?php echo esc_html( $title ); ?></span>
+                    <span class="wpaicb-header-subtitle"><?php echo esc_html( $subtitle ); ?></span>
+                </div>
+            </div>
+            <div class="wpaicb-header-actions">
+                <button class="wpaicb-header-btn" id="wpaicb-new-chat" title="New conversation">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>
+                </button>
+                <button class="wpaicb-header-btn" id="wpaicb-close-chat" title="Close">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="wpaicb-messages" id="wpaicb-messages" role="log" aria-live="polite"></div>
+
+        <div class="wpaicb-email-form" id="wpaicb-email-form" style="display:none;">
+            <div class="wpaicb-email-form-inner">
+                <p class="wpaicb-email-label">Leave your email for follow-up</p>
+                <div class="wpaicb-email-input-wrap">
+                    <input type="email" id="wpaicb-email-input" class="wpaicb-email-input" placeholder="your@email.com">
+                    <button type="button" id="wpaicb-email-submit" class="wpaicb-email-submit">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="wpaicb-rating" id="wpaicb-rating" style="display:none;">
+            <p class="wpaicb-rating-label">Was this helpful?</p>
+            <div class="wpaicb-rating-stars">
+                <button class="wpaicb-star" data-rating="1" title="1">&#9733;</button>
+                <button class="wpaicb-star" data-rating="2" title="2">&#9733;</button>
+                <button class="wpaicb-star" data-rating="3" title="3">&#9733;</button>
+                <button class="wpaicb-star" data-rating="4" title="4">&#9733;</button>
+                <button class="wpaicb-star" data-rating="5" title="5">&#9733;</button>
+            </div>
+        </div>
+
+        <div class="wpaicb-input-area">
+            <div class="wpaicb-input-container">
+                <textarea id="wpaicb-input" class="wpaicb-chat-input" placeholder="Type your message..." rows="1" maxlength="1000"></textarea>
+                <button id="wpaicb-send" class="wpaicb-send-btn" disabled>
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </button>
+            </div>
+            <?php if ( $branding ) : ?>
+            <div class="wpaicb-branding">
+                <span>Powered by <strong>WP AI Chatbot</strong></span>
+            </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+        <?php
     }
 
     /**
@@ -90,33 +194,33 @@ class Widget {
             'sessionId'      => $this->get_or_create_session_id(),
             'pageUrl'        => $this->get_current_url(),
             'isConfigured'   => $is_configured,
-            'position'       => $settings['widget_position'] ?? 'bottom-right',
-            'color'          => $settings['widget_color'] ?? '#6366F1',
-            'title'          => $settings['widget_title'] ?? __( 'Chat with us', 'wp-ai-chatbot' ),
-            'subtitle'       => $settings['widget_subtitle'] ?? __( 'We typically reply within minutes', 'wp-ai-chatbot' ),
-            'welcomeMessage' => $settings['welcome_message'] ?? __( 'Hi! How can I help you today?', 'wp-ai-chatbot' ),
-            'fallbackMessage' => $settings['fallback_message'] ?? '',
-            'emailFallback'  => (bool) ( $settings['email_fallback'] ?? true ),
-            'darkMode'       => $settings['dark_mode'] ?? 'auto',
-            'showBranding'   => (bool) ( $settings['show_branding'] ?? true ),
-            'soundEnabled'   => (bool) ( $settings['sound_enabled'] ?? true ),
-            'typingIndicator' => (bool) ( $settings['typing_indicator'] ?? true ),
-            'suggestionChips' => $settings['suggestion_chips'] ?? array(),
+            'position'       => isset( $settings['widget_position'] ) ? $settings['widget_position'] : 'bottom-right',
+            'color'          => isset( $settings['widget_color'] ) ? $settings['widget_color'] : '#6366F1',
+            'title'          => isset( $settings['widget_title'] ) ? $settings['widget_title'] : 'Chat with us',
+            'subtitle'       => isset( $settings['widget_subtitle'] ) ? $settings['widget_subtitle'] : 'We typically reply within minutes',
+            'welcomeMessage' => isset( $settings['welcome_message'] ) ? $settings['welcome_message'] : 'Hi! How can I help you today?',
+            'fallbackMessage' => isset( $settings['fallback_message'] ) ? $settings['fallback_message'] : '',
+            'emailFallback'  => isset( $settings['email_fallback'] ) ? (bool) $settings['email_fallback'] : true,
+            'darkMode'       => isset( $settings['dark_mode'] ) ? $settings['dark_mode'] : 'auto',
+            'showBranding'   => isset( $settings['show_branding'] ) ? (bool) $settings['show_branding'] : true,
+            'soundEnabled'   => isset( $settings['sound_enabled'] ) ? (bool) $settings['sound_enabled'] : true,
+            'typingIndicator' => isset( $settings['typing_indicator'] ) ? (bool) $settings['typing_indicator'] : true,
+            'suggestionChips' => isset( $settings['suggestion_chips'] ) ? $settings['suggestion_chips'] : array(),
             'strings'        => array(
-                'placeholder'    => __( 'Type your message...', 'wp-ai-chatbot' ),
-                'send'           => __( 'Send', 'wp-ai-chatbot' ),
-                'typing'         => __( 'Typing...', 'wp-ai-chatbot' ),
-                'emailLabel'     => __( 'Leave your email for follow-up', 'wp-ai-chatbot' ),
-                'emailPlaceholder' => __( 'your@email.com', 'wp-ai-chatbot' ),
-                'emailSubmit'    => __( 'Submit', 'wp-ai-chatbot' ),
-                'emailThanks'    => __( 'Thanks! We\'ll get back to you soon.', 'wp-ai-chatbot' ),
-                'rateTitle'      => __( 'Was this helpful?', 'wp-ai-chatbot' ),
-                'poweredBy'      => __( 'Powered by WP AI Chatbot', 'wp-ai-chatbot' ),
-                'close'          => __( 'Close', 'wp-ai-chatbot' ),
-                'minimize'       => __( 'Minimize', 'wp-ai-chatbot' ),
-                'newChat'        => __( 'New conversation', 'wp-ai-chatbot' ),
-                'error'          => __( 'Something went wrong. Please try again.', 'wp-ai-chatbot' ),
-                'rateLimit'      => __( 'You\'re sending messages too quickly. Please wait a moment.', 'wp-ai-chatbot' ),
+                'placeholder'      => 'Type your message...',
+                'send'             => 'Send',
+                'typing'           => 'Typing...',
+                'emailLabel'       => 'Leave your email for follow-up',
+                'emailPlaceholder' => 'your@email.com',
+                'emailSubmit'      => 'Submit',
+                'emailThanks'      => 'Thanks! We\'ll get back to you soon.',
+                'rateTitle'        => 'Was this helpful?',
+                'poweredBy'        => 'Powered by WP AI Chatbot',
+                'close'            => 'Close',
+                'minimize'         => 'Minimize',
+                'newChat'          => 'New conversation',
+                'error'            => 'Something went wrong. Please try again.',
+                'rateLimit'        => 'You\'re sending messages too quickly. Please wait a moment.',
             ),
         );
     }
@@ -127,14 +231,12 @@ class Widget {
      * @return string
      */
     private function get_or_create_session_id() {
-        // Use a cookie-based session for consistency
         $cookie_name = 'wpaicb_session';
 
         if ( isset( $_COOKIE[ $cookie_name ] ) ) {
             return sanitize_text_field( wp_unslash( $_COOKIE[ $cookie_name ] ) );
         }
 
-        // Generate a new session ID (will be set by JavaScript)
         return wp_generate_uuid4();
     }
 
@@ -150,7 +252,6 @@ class Widget {
             return home_url( add_query_arg( array(), $wp->request ) );
         }
 
-        // Fallback: use server variables
         if ( isset( $_SERVER['REQUEST_URI'] ) ) {
             return home_url( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) );
         }
@@ -162,14 +263,18 @@ class Widget {
      * Adjust hex color brightness.
      *
      * @param string $hex Hex color code.
-     * @param int    $steps Steps to adjust (-255 to 255).
+     * @param int    $steps Steps to adjust.
      * @return string Adjusted hex color.
      */
     public function adjust_color( $hex, $steps ) {
-        $hex = ltrim( $hex, '#' );
+        $hex = ltrim( (string) $hex, '#' );
 
         if ( strlen( $hex ) === 3 ) {
             $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+        }
+
+        if ( strlen( $hex ) !== 6 ) {
+            return '#6366F1'; // Fallback to default if invalid
         }
 
         $r = max( 0, min( 255, hexdec( substr( $hex, 0, 2 ) ) + $steps ) );

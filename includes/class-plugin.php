@@ -106,9 +106,10 @@ class Plugin {
             add_action( 'wp_ajax_wpaicb_save_settings', array( $this, 'ajax_save_settings' ) );
         }
 
-        // Frontend hooks
+        // Frontend hooks - render in footer (wp_body_open as backup for themes without wp_footer)
         add_action( 'wp_enqueue_scripts', array( $this->widget, 'enqueue_assets' ) );
-        add_action( 'wp_footer', array( $this->widget, 'render' ) );
+        add_action( 'wp_footer', array( $this->widget, 'render' ), 99 );
+        add_action( 'wp_body_open', array( $this->widget, 'render' ) );
 
         // REST API hooks
         add_action( 'rest_api_init', array( $this->api, 'register_routes' ) );
