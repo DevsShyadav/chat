@@ -41,7 +41,7 @@ class Openai_Provider implements Provider_Interface {
      */
     public function __construct() {
         $this->api_key = Admin::get_settings( 'openai_api_key', '' );
-        $this->model   = Admin::get_settings( 'openai_model', 'gpt-3.5-turbo' );
+        $this->model   = Admin::get_settings( 'openai_model', 'gpt-5.4-mini' );
     }
 
     /**

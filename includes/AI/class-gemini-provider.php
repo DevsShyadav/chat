@@ -41,7 +41,7 @@ class Gemini_Provider implements Provider_Interface {
      */
     public function __construct() {
         $this->api_key = Admin::get_settings( 'gemini_api_key', '' );
-        $this->model   = Admin::get_settings( 'gemini_model', 'gemini-pro' );
+        $this->model   = Admin::get_settings( 'gemini_model', 'gemini-2.5-flash' );
     }
 
     /**

@@ -47,17 +47,17 @@ class Provider_Factory {
         return array(
             'openai' => array(
                 'name'        => 'OpenAI',
-                'description' => 'GPT-3.5, GPT-4, GPT-4o',
+                'description' => 'GPT-5.4, GPT-5.4 Mini, o4-mini',
                 'url'         => 'https://platform.openai.com/api-keys',
             ),
             'gemini' => array(
                 'name'        => 'Google Gemini',
-                'description' => 'Gemini Pro, Gemini 1.5 Flash',
+                'description' => 'Gemini 2.5 Flash/Pro, 3.5 Flash',
                 'url'         => 'https://aistudio.google.com/app/apikey',
             ),
             'groq' => array(
                 'name'        => 'Groq',
-                'description' => 'LLaMA 3, Mixtral (Fastest)',
+                'description' => 'LLaMA 4, DeepSeek R1, Qwen (Fastest)',
                 'url'         => 'https://console.groq.com/keys',
             ),
         );

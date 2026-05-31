@@ -19,25 +19,33 @@ class Settings {
     public function render() {
         $settings = Admin::get_settings();
 
-        // Available AI models per provider
+        // Available AI models per provider (updated May 2026)
         $models = array(
             'openai' => array(
-                'gpt-3.5-turbo'    => 'GPT-3.5 Turbo (Fast & Affordable)',
-                'gpt-4'            => 'GPT-4 (Most Capable)',
-                'gpt-4-turbo'      => 'GPT-4 Turbo (Fast & Capable)',
-                'gpt-4o'           => 'GPT-4o (Latest)',
-                'gpt-4o-mini'      => 'GPT-4o Mini (Budget)',
+                'gpt-5.4-mini'     => 'GPT-5.4 Mini (Best Value - Recommended)',
+                'gpt-5.4'          => 'GPT-5.4 (Most Capable)',
+                'gpt-4.1-mini'     => 'GPT-4.1 Mini (Fast & Budget)',
+                'gpt-4.1'          => 'GPT-4.1 (Reliable)',
+                'gpt-4o-mini'      => 'GPT-4o Mini (Legacy Budget)',
+                'gpt-4o'           => 'GPT-4o (Legacy)',
+                'o4-mini'          => 'o4-mini (Reasoning)',
+                'o3-mini'          => 'o3-mini (Reasoning Budget)',
             ),
             'gemini' => array(
-                'gemini-pro'       => 'Gemini Pro',
-                'gemini-1.5-pro'   => 'Gemini 1.5 Pro',
-                'gemini-1.5-flash' => 'Gemini 1.5 Flash (Fast)',
+                'gemini-2.5-flash' => 'Gemini 2.5 Flash (Fast - Recommended)',
+                'gemini-2.5-pro'   => 'Gemini 2.5 Pro (Most Capable)',
+                'gemini-2.0-flash' => 'Gemini 2.0 Flash (Stable)',
+                'gemini-3.5-flash' => 'Gemini 3.5 Flash (Newest)',
             ),
             'groq' => array(
-                'llama3-8b-8192'    => 'LLaMA 3 8B (Fast)',
-                'llama3-70b-8192'   => 'LLaMA 3 70B (Capable)',
-                'mixtral-8x7b-32768' => 'Mixtral 8x7B',
-                'gemma-7b-it'       => 'Gemma 7B',
+                'llama-4-scout-17b-16e-instruct'  => 'LLaMA 4 Scout 17B (Fast - Recommended)',
+                'llama-4-maverick-17b-128e-instruct' => 'LLaMA 4 Maverick 17B (Capable)',
+                'deepseek-r1-distill-llama-70b'   => 'DeepSeek R1 70B (Reasoning)',
+                'qwen-qwq-32b'                    => 'Qwen QwQ 32B (Reasoning)',
+                'llama-3.3-70b-versatile'         => 'LLaMA 3.3 70B (Versatile)',
+                'llama-3.1-8b-instant'            => 'LLaMA 3.1 8B (Fastest)',
+                'mixtral-8x7b-32768'              => 'Mixtral 8x7B (32K Context)',
+                'gemma2-9b-it'                    => 'Gemma 2 9B (Compact)',
             ),
         );
 

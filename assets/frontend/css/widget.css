@@ -9,7 +9,7 @@
 .wpaicb-widget {
     --wpaicb-primary: #6366F1;
     --wpaicb-primary-dark: #4F46E5;
-    --wpaicb-primary-light: #6366F120;
+    --wpaicb-primary-light: rgba(99, 102, 241, 0.12);
     --wpaicb-bg: #ffffff;
     --wpaicb-bg-secondary: #f9fafb;
     --wpaicb-text: #1f2937;
@@ -63,7 +63,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+    box-shadow: 0 4px 20px var(--wpaicb-primary-light), 0 2px 8px rgba(0,0,0,0.1);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     color: #fff;
@@ -71,7 +71,7 @@
 
 .wpaicb-trigger:hover {
     transform: scale(1.08);
-    box-shadow: 0 6px 28px rgba(99, 102, 241, 0.5);
+    box-shadow: 0 6px 28px var(--wpaicb-primary-light), 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .wpaicb-trigger:active { transform: scale(0.95); }

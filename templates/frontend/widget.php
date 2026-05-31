@@ -18,7 +18,7 @@ $dark_mode       = $widget_settings['dark_mode'] ?? 'auto';
 <div id="wpaicb-chat-widget"
      class="wpaicb-widget wpaicb-widget-<?php echo esc_attr( $position ); ?> wpaicb-theme-<?php echo esc_attr( $dark_mode ); ?>"
      data-position="<?php echo esc_attr( $position ); ?>"
-     style="--wpaicb-primary: <?php echo esc_attr( $color ); ?>; --wpaicb-primary-dark: <?php echo esc_attr( $this->adjust_color( $color, -20 ) ); ?>; --wpaicb-primary-light: <?php echo esc_attr( $color . '20' ); ?>;"
+     style="--wpaicb-primary: <?php echo esc_attr( $color ); ?>; --wpaicb-primary-dark: <?php echo esc_attr( $this->adjust_color( $color, -20 ) ); ?>; --wpaicb-primary-light: <?php echo esc_attr( $this->adjust_color( $color, 0 ) . '1F' ); ?>;"
      aria-label="<?php esc_attr_e( 'Chat Widget', 'wp-ai-chatbot' ); ?>"
      role="complementary">
 

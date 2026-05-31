@@ -41,7 +41,7 @@ class Groq_Provider implements Provider_Interface {
      */
     public function __construct() {
         $this->api_key = Admin::get_settings( 'groq_api_key', '' );
-        $this->model   = Admin::get_settings( 'groq_model', 'llama3-8b-8192' );
+        $this->model   = Admin::get_settings( 'groq_model', 'llama-4-scout-17b-16e-instruct' );
     }
 
     /**
