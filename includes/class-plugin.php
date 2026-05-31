@@ -101,6 +101,9 @@ class Plugin {
         if ( is_admin() ) {
             add_action( 'admin_menu', array( $this->admin, 'register_menu' ) );
             add_action( 'admin_enqueue_scripts', array( $this->admin, 'enqueue_assets' ) );
+
+            // AJAX handlers for settings save (most reliable method)
+            add_action( 'wp_ajax_wpaicb_save_settings', array( $this, 'ajax_save_settings' ) );
         }
 
         // Frontend hooks
@@ -133,5 +136,36 @@ class Plugin {
 
         $analytics_model = new Database\Analytics_Model();
         $analytics_model->cleanup_old( 90 );
+    }
+
+    /**
+     * AJAX handler for saving settings.
+     * Uses wp_ajax instead of REST API for maximum reliability.
+     */
+    public function ajax_save_settings() {
+        // Verify nonce
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'wpaicb_admin_nonce' ) ) {
+            wp_send_json_error( array( 'message' => 'Security check failed.' ) );
+        }
+
+        // Verify capability
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( array( 'message' => 'Permission denied.' ) );
+        }
+
+        // Get settings from POST data
+        $raw_settings = isset( $_POST['settings'] ) ? $_POST['settings'] : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+
+        if ( empty( $raw_settings ) || ! is_array( $raw_settings ) ) {
+            wp_send_json_error( array( 'message' => 'No settings provided.' ) );
+        }
+
+        // Sanitize settings
+        $sanitized = Security\Sanitizer::sanitize_settings( $raw_settings );
+
+        // Save settings
+        Admin\Admin::update_settings( $sanitized );
+
+        wp_send_json_success( array( 'message' => 'Settings saved successfully!' ) );
     }
 }
