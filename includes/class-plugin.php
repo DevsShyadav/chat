@@ -47,9 +47,30 @@ class Plugin {
     public function run() {
         $this->load_textdomain();
         $this->ensure_settings_exist();
+        $this->migrate_old_colors();
         $this->check_db_update();
         $this->init_components();
         $this->register_hooks();
+    }
+
+    /**
+     * Migrate old indigo/purple widget color to new green theme.
+     * Only updates if the saved color is still the old default,
+     * preserving any custom color the user intentionally chose.
+     */
+    private function migrate_old_colors() {
+        $settings = get_option( 'wpaicb_settings' );
+
+        if ( ! is_array( $settings ) || empty( $settings['widget_color'] ) ) {
+            return;
+        }
+
+        $old_colors = array( '#6366f1', '#4f46e5', '#8b5cf6' );
+
+        if ( in_array( strtolower( $settings['widget_color'] ), $old_colors, true ) ) {
+            $settings['widget_color'] = '#10B981';
+            update_option( 'wpaicb_settings', $settings );
+        }
     }
 
     /**
